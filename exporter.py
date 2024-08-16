@@ -8,7 +8,7 @@ from sklearn.ensemble import RandomForestRegressor
 df = pd.read_csv("full_players_info_2023.csv")
 
 # Drop columns and one-hot encode as in your Streamlit app
-df = df.drop(columns=['name'])
+df = df.drop(columns=['name', 'height_in_cm'])
 df = pd.get_dummies(df, columns=['country_of_citizenship', 'position', 'foot', 'current_club_domestic_competition_id', 'current_club_name'])
 
 # Split data into features and target

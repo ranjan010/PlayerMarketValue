@@ -28,6 +28,10 @@ try:
     if 'name' in df.columns:
         df = df.drop(columns=['name'])
 
+    # Drop 'height_in_cm' column
+    if 'height_in_cm' in df.columns:
+        df = df.drop(columns=['height_in_cm'])
+
     # One-Hot Encode categorical variables
     df = pd.get_dummies(df, columns=['country_of_citizenship', 'position', 'foot', 'current_club_domestic_competition_id', 'current_club_name'])
 
@@ -39,7 +43,6 @@ try:
     country_of_citizenship = st.selectbox("Country of Citizenship", df_original['country_of_citizenship'].unique())
     position = st.selectbox("Position", df_original['position'].unique())
     foot = st.selectbox("Foot", df_original['foot'].unique())
-    height_in_cm = st.number_input("Height (in cm)", min_value=150, max_value=220, value=180)
     current_club_domestic_competition_id = st.selectbox("Club Competition ID", df_original['current_club_domestic_competition_id'].unique())
     current_club_name = st.selectbox("Current Club", df_original['current_club_name'].unique())
     yellow_cards = st.number_input("Yellow Cards", min_value=0, max_value=20, value=0)
@@ -54,7 +57,6 @@ try:
         'country_of_citizenship': [country_of_citizenship],
         'position': [position],
         'foot': [foot],
-        'height_in_cm': [height_in_cm],
         'current_club_domestic_competition_id': [current_club_domestic_competition_id],
         'current_club_name': [current_club_name],
         'yellow_cards': [yellow_cards],
