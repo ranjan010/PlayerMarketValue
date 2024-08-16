@@ -1,15 +1,19 @@
 import streamlit as st
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+import pickle
 
 # Streamlit app title
 st.title("Football Player Market Value Prediction")
 csv_file_path = "full_players_info_2023.csv"  # Replace with your actual CSV file path
 
 try:
+    # Load the pre-trained model and scaler
+    with open('model.pkl', 'rb') as model_file:
+        model = pickle.load(model_file)
+
+    with open('scaler.pkl', 'rb') as scaler_file:
+        scaler = pickle.load(scaler_file)
+
     # Read the CSV file
     df = pd.read_csv(csv_file_path)
 
@@ -29,19 +33,6 @@ try:
 
     # Split data into features and target
     X = df.drop(columns=['market_value_in_eur'])
-    y = df['market_value_in_eur']
-
-    # Split the dataset into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-    # Scale the features
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
-
-    # Train the model
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
-    model.fit(X_train_scaled, y_train)
 
     # UI to input player attributes using the original dataframe
     st.write("### Enter Player Attributes and Details:")
@@ -74,7 +65,7 @@ try:
         'age': [age]
     })
 
-    # Apply the same one-hot encoding and scaling to the input data
+    # Apply the same one-hot encoding to the input data
     input_data = pd.get_dummies(input_data)
     input_data = input_data.reindex(columns=X.columns, fill_value=0)
     input_data_scaled = scaler.transform(input_data)
